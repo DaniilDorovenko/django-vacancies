@@ -1,0 +1,6 @@
+*.mp4
+/flask-html-master/
+/myenv/
+/stepik_dj_demo-master/
+*.pyc
+.idea

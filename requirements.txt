@@ -1,0 +1,9 @@
+flake8==3.8.4
+importlib-metadata==2.0.0
+mccabe==0.6.1
+pycodestyle==2.6.0
+pyflakes==2.2.0
+zipp==3.4.0
+Django==3.0.0
+gunicorn
+django_heroku
