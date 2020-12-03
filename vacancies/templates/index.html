@@ -51,7 +51,7 @@
             <div class="col-6 col-md-6 col-lg-3">
           <div class="card pt-5 text-center mb-4">
             <a href="{% url 'company' company.id %}" style="max-width: 150px;" class="mx-auto d-block">
-              <img class="mx-auto d-block mw-100" src="/static/img/{{ company.logo }}" width="150" height="80" alt="">
+              <img class="mx-auto d-block mw-100" src="/media/{{ company.logo }}" width="150" height="80" alt="">
             </a>
             <div class="card-body">
               <p class="card-text"><a href="{% url 'company' company.id %}">{{ company.vacancy_count }} вакансии</a></p>
