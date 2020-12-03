@@ -81,13 +81,18 @@ class MyCompanyUpdateView(LoginRequiredMixin, UpdateView):
         try:
             mycompany = Company.objects.get(owner = self.request.user)
             return mycompany
-        except:
-            redirect('mycompany_create')
+        except Company.DoesNotExist:
+            pass
+
+    def dispatch(self, request, *args, **kwargs):
+        return redirect('mycompany_create')
 
 
 class MyCompanyCreateView(LoginRequiredMixin, CreateView):
     model = Company
     fields = ['title',  'employee_count', 'location', 'description', 'logo', ]
+    success_url = 'mycompany'
+
     def form_valid(self, form):
         company = form.save(commit=False)
         company.owner = self.request.user
