@@ -1,10 +1,11 @@
 from django.urls import path
+from django.contrib.auth.decorators import login_required
 
 from vacancies.views import MainView, CompanyView, CompaniesView, \
     VacancyView, VacanciesView, VacancyBySpecialisationView, \
     MyLoginView, MyLogoutView, SignupView, \
     MyCompanyUpdateView, MyCompanyCreateView, \
-    MyVacancyUpdateView, MyVacancyView
+    MyVacancyUpdateView, MyVacanciesView, MyVacancyCreateView, MyVacancyApplicatiosView
 
 
 urlpatterns = [
@@ -18,8 +19,10 @@ urlpatterns = [
     path('login/', MyLoginView.as_view(), name='login'),
     path('logout/', MyLogoutView.as_view(), name='logout'),
     path('signup/', SignupView.as_view(), name='signup'),
-    path('mycompany/', MyCompanyUpdateView.as_view(), name='mycompany'),
-    path('mycompany/create/', MyCompanyCreateView.as_view(), name='mycompany_create'),
-    path('myvacancies/<int:pk>', MyVacancyUpdateView.as_view(), name='myvacancy_update'),
-    path('myvacancy/<int:pk>', MyVacancyView.as_view(), name='myvacancy'),
+    path('mycompany/', login_required(MyCompanyUpdateView.as_view()), name='mycompany'),
+    path('mycompany/create/', login_required(MyCompanyCreateView.as_view()), name='mycompany_create'),
+    path('myvacancy/<int:pk>', login_required(MyVacancyUpdateView.as_view()), name='myvacancy_update'),
+    path('myvacancy/create/', login_required(MyVacancyCreateView.as_view()), name='myvacancy_create'),
+    path('myvacancies/', login_required(MyVacanciesView.as_view()), name='myvacancies'),
+    path('myvacancy/<int:pk>/applications/', login_required(MyVacancyApplicatiosView.as_view()), name='myvacancy_applications'),
 ]

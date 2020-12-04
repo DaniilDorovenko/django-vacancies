@@ -17,7 +17,14 @@
           <div class="card-body px-4 pb-4">
             <section class="tab-pane fade show active">
               <h2 class="h4 pt-2 pb-3">Вакансии</h2>
-              <!-- vacancy state 1 -->
+            {% if messages %}
+                    {% for message in messages %}
+              <p class="alert alert-info" role="alert">
+                {{ message }}
+              </p>
+                    {% endfor %}
+                {% endif %}
+
                 {% for vacancy in myvacancies %}
               <div class="card mt-3">
                 <div class="card-body px-4">
@@ -25,18 +32,26 @@
                     <div class="col-6 col-lg-8">
                       <a href="{% url 'vacancy' vacancy.id %}" class="mb-1">{{ vacancy.title }}</a>
                       <p class="mb-1">
-                        <span class="mr-4">{{  vacancy.salary_min|floatformat:0 }}</span><a href="" class="text-info">3 отклика</a>
+                        <span class="mr-4">{{  vacancy.salary_min|floatformat:0 }}</span>
+                          {% if  vacancy.appication_count  > 0 %}
+                          <a href="{% url 'myvacancy_applications' vacancy.id %}" class="text-info">{{ vacancy.appication_count }} отклика</a>
+                          {% else %}
+                              <span class="text-info">нет откликов</span>
+                          {% endif %}
                       </p>
                     </div>
                     <div class="col-6 col-lg-4 text-right">
-                      <a href="{% url 'myvacancy' vacancy.id %}" class="btn btn-outline-info">Изменить</a>
+                      <a href="{% url 'myvacancy_update' vacancy.id %}" class="btn btn-outline-info">Изменить</a>
                     </div>
                   </div>
                 </div>
               </div>
+                    {% empty %}
+                    Нет вакансий
                 {% endfor %}
-              <!-- END vacancy state 1 -->
-
+            <div class="pt-4">
+            <a href="{% url 'myvacancy_create' %}" class="btn btn-info"">Добавить вакансию</a>
+            </div>
             </section>
           </div>
         </div>

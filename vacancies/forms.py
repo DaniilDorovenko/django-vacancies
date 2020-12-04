@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from crispy_forms.helper import FormHelper
 
 
-# from vacancies.models import Company, Vacancy
+
+from vacancies.models import VacancyApplication, Vacancy
 
 class SignupForm(UserCreationForm):
 
@@ -44,6 +45,19 @@ class LoginForm(AuthenticationForm):
         self.fields['password'].label = False
 
 
+class VacancyApplicationForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+
+            self.helper = FormHelper()
+            self.helper.form_method = 'post'
+
+
+    class Meta:
+        model = VacancyApplication
+        fields =  ['written_username',  'written_phone', 'written_cover_letter', ]
+
 
 # class CompanyEditForm(ModelForm):
 #
@@ -77,13 +91,14 @@ class LoginForm(AuthenticationForm):
 #     class Meta:
 #         model = Vacancy
 #         fields =  ['title',  'specialty', 'salary_min', 'salary_max', 'skills', 'description']
-#
-#         labels = {
-#             'title': 'Название вакансии',
-#             'specialty': 'Специализация',
-#             'salary_min': 'Зарплата от',
-#             'salary_max': 'Зарплата до',
-#             'skills': 'Требуемые навыки',
-#             'description': 'Описание вакансии',
-#         }
+
+
+        # labels = {
+        #     'title': 'Название вакансии',
+        #     'specialty': 'Специализация',
+        #     'salary_min': 'Зарплата от',
+        #     'salary_max': 'Зарплата до',
+        #     'skills': 'Требуемые навыки',
+        #     'description': 'Описание вакансии',
+        # }
 

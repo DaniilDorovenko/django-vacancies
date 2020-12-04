@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  <main class="container mt-3">
+    <section>
+      <p class="text-center pt-1">На вакансию <b>"{{ object_list.0.vacancy.title }}"</b> оставлено {{ object_list | length }} отклика</p>
+      <div class="row mt-5">
+        <div class="col-12 col-lg-8 offset-lg-2 m-auto">
+            {% for application in object_list  %}
+                <div class="card mb-4">
+                <div class="card-body px-4">
+                  <div class="row">
+                    <div class="col-12 col-md-8 col-lg-9">
+                      <h2 class="h2 pb-2">{{  application.written_username }}</h2>
+                      <p class="mb-2">{{  application.written_phone }}</p>
+                     <p class="mb-2"> {{ application.written_cover_letter }}</p>
+                </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+{% endblock %}

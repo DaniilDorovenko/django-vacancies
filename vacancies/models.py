@@ -2,6 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 
+from phonenumber_field.modelfields import PhoneNumberField
+from tinymce import HTMLField
+
+
+
 
 class Company(models.Model):
     title = models.CharField(max_length=64)
@@ -26,7 +31,15 @@ class Vacancy(models.Model):
     specialty = models.ForeignKey(Specialty, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     skills = models.CharField(max_length=64)
-    description = models.TextField()
+    description = HTMLField('Content')
     salary_min = models.FloatField()
     salary_max = models.FloatField()
     published_at = models.DateTimeField(auto_now_add=True)
+
+class VacancyApplication(models.Model):
+    written_username = models.CharField(max_length=64)
+    written_phone = PhoneNumberField()
+    written_cover_letter = models.TextField()
+    vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
+    applicant = models.ForeignKey(User, on_delete=models.CASCADE)
+

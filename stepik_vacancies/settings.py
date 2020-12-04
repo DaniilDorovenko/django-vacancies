@@ -39,8 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'phonenumber_field',
     'crispy_forms',
+    'tinymce',
     'vacancies',
+
 ]
 
 MIDDLEWARE = [
@@ -129,7 +132,7 @@ DATE_FORMAT = 'd E'
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = 'static'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media'
@@ -138,15 +141,18 @@ MEDIA_COMPANY_IMAGE_DIR = 'company_images'
 MEDIA_SPECIALITY_IMAGE_DIR = 'speciality_images'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
-    '/var/www/static/',
+    'C:\projects\stepik_vacancies\stepik_vacancies\static',
 )
+
+
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
 
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = 'login'
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
