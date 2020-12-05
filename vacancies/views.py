@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from vacancies.forms import SignupForm, LoginForm, VacancyApplicationForm
-from vacancies.models import Vacancy, Company, Specialty, VacancyApplication
+from vacancies.models import Vacancy, Company, Specialty, VacancyApplication, Resume
 
 
 class MainView(View):
@@ -80,6 +80,12 @@ class CompanyView(DetailView):
         return context
 
 
+class MyCompanyPlugView(View):
+
+    def get(self, request):
+        return render(request, 'company_plug.html')
+
+
 class CompaniesView(ListView):
     model = Company
 
@@ -103,26 +109,28 @@ class SignupView(CreateView):
 class MyCompanyUpdateView(SuccessMessageMixin, UpdateView):
     model = Company
     fields = ['title',  'employee_count', 'location', 'description', 'logo']
-    success_message = 'Нифига не работает'
+    success_message = 'Компания обновлена'
+    success_url = '/mycompany/'
 
     def dispatch(self, request, *args, **kwargs):
         try:
             mycompany = Company.objects.get(owner = self.request.user)
-            # messages.success(request, 'Информация о компании обновлена')
         except Company.DoesNotExist:
-            return redirect('mycompany_create')
+            return redirect('mycompany_plug')
         self.get_object()
 
-        return super(MyCompanyUpdateView, self).get(request, *args, **kwargs)
+        return super(MyCompanyUpdateView, self).dispatch(request, *args, **kwargs)
 
     def get_object(self):
         mycompany = Company.objects.get(owner=self.request.user)
         return mycompany
 
 
-class MyCompanyCreateView(CreateView):
+class MyCompanyCreateView(SuccessMessageMixin, CreateView):
     model = Company
     fields = ['title',  'employee_count', 'location', 'description', 'logo', ]
+    success_message = 'Компания создана'
+    success_url = '/mycompany/'
 
     def form_valid(self, form):
         company = form.save(commit=False)
@@ -139,28 +147,24 @@ class MyVacanciesView(View):
         return render(request, 'my-vacancy-list.html',{'myvacancies': myvacancies})
 
 
-class MyVacancyUpdateView(UpdateView):
+class MyVacancyUpdateView(SuccessMessageMixin, UpdateView):
     model = Vacancy
     fields = ['title', 'specialty', 'salary_min', 'salary_max', 'skills', 'description']
+    success_message = 'Вакансия обновлена'
+    success_url = '/myvacancies/'
 
     def get_context_data(self, **kwargs):
         context = super(MyVacancyUpdateView, self).get_context_data(**kwargs)
         context['applications'] = VacancyApplication.objects.filter(vacancy__id=self.kwargs['pk'])
         return context
 
-    # def dispatch(self, request, *args, **kwargs):
-    #     try:
-    #         mycacancy = Company.objects.get(vacancy__id=self.kwargs['pk'], owner=self.request.user)
-    #     except Company.DoesNotExist:
-    #         return redirect('myvacancies')
-    #     return super(MyVacancyUpdateView, self).get(request, *args, **kwargs)
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            mycacancy = Company.objects.get(vacancy__id=self.kwargs['pk'], owner=self.request.user)
+        except Company.DoesNotExist:
+            return redirect('myvacancies')
+        return super(MyVacancyUpdateView, self).dispatch(request, *args, **kwargs)
 
-    def form_valid(self, form, **kwargs):
-        vacancy = form.cleaned_data['title']
-        messages.success(self.request, f'Вакансия {vacancy} изменена')
-        # return super().form_valid(form)
-        # return redirect('myvacancy', pk=self.kwargs['pk'])
-        return redirect('myvacancies')
 
 class MyVacancyCreateView(CreateView):
     model = Vacancy
@@ -179,6 +183,46 @@ class MyVacancyApplicatiosView(ListView):
     def get_queryset(self, **kwargs):
         applications = VacancyApplication.objects.filter(vacancy_id=self.kwargs['pk'])
         return applications
+
+
+class MyResumePlugView(View):
+
+    def get(self, request):
+        return render(request, 'resume_plug.html')
+
+
+class MyResumeUpdateView(SuccessMessageMixin, UpdateView):
+    model = Resume
+    fields = ['status', 'salary', 'specialty', 'grade', 'education', 'experience', 'portfolio']
+    success_message = 'Резюме обновлено'
+    success_url = '/myresume/'
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            myresume = Resume.objects.get(owner = self.request.user)
+        except Resume.DoesNotExist:
+            return redirect('myresume_plug')
+        self.get_object()
+
+        return super(MyResumeUpdateView, self).dispatch(request, *args, **kwargs)
+
+    def get_object(self):
+        myresume = Resume.objects.get(owner=self.request.user)
+        return myresume
+
+
+class MyResumeCreateView(SuccessMessageMixin, CreateView):
+    model = Resume
+    fields = ['status', 'salary', 'specialty', 'grade', 'education', 'experience', 'portfolio']
+    success_message = 'Резюме создано'
+    success_url = '/myresume/'
+
+    def form_valid(self, form):
+        resume = form.save(commit=False)
+        resume.owner = self.request.user
+        resume.save()
+        return redirect('myresume')
+
 
 def page_not_found(request, exception):
     return HttpResponse('Нету такой страницы!')

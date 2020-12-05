@@ -44,3 +44,26 @@ class VacancyApplication(models.Model):
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
     applicant = models.ForeignKey(User, on_delete=models.CASCADE)
 
+class Status(models.Model):
+    status = models.CharField(max_length=64, verbose_name=u"Статус")
+
+    def __str__(self):
+        return self.status
+
+
+class  Grade(models.Model):
+    grade = models.CharField(max_length=64, verbose_name=u"Квалификация")
+
+    def __str__(self):
+        return self.grade
+
+
+class Resume(models.Model):
+    owner = models.OneToOneField(User, on_delete=models.CASCADE)
+    status = models.ForeignKey(Status, on_delete=models.CASCADE, verbose_name=u"Статус")
+    salary = models.FloatField(verbose_name=u"Ожидаемое вознаграждение")
+    specialty = models.ForeignKey(Specialty, on_delete=models.CASCADE, verbose_name=u"Специализация")
+    grade = models.ForeignKey(Grade, on_delete=models.CASCADE, verbose_name=u"Квалификация")
+    education = HTMLField(u'Образование')
+    experience = HTMLField(u'Опыт работы')
+    portfolio = models.CharField(max_length=64, verbose_name=u"Ссылка на портфолио")

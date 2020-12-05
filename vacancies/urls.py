@@ -4,8 +4,9 @@ from django.contrib.auth.decorators import login_required
 from vacancies.views import MainView, CompanyView, CompaniesView, \
     VacancyView, VacanciesView, VacancyBySpecialisationView, \
     MyLoginView, MyLogoutView, SignupView, \
-    MyCompanyUpdateView, MyCompanyCreateView, \
-    MyVacancyUpdateView, MyVacanciesView, MyVacancyCreateView, MyVacancyApplicatiosView
+    MyCompanyUpdateView, MyCompanyCreateView, MyCompanyPlugView, \
+    MyVacancyUpdateView, MyVacanciesView, MyVacancyCreateView, MyVacancyApplicatiosView,\
+    MyResumeUpdateView, MyResumeCreateView, MyResumePlugView
 
 
 urlpatterns = [
@@ -20,7 +21,11 @@ urlpatterns = [
     path('logout/', MyLogoutView.as_view(), name='logout'),
     path('signup/', SignupView.as_view(), name='signup'),
     path('mycompany/', login_required(MyCompanyUpdateView.as_view()), name='mycompany'),
+    path('mycompany/plug/', login_required(MyCompanyPlugView.as_view()), name='mycompany_plug'),
     path('mycompany/create/', login_required(MyCompanyCreateView.as_view()), name='mycompany_create'),
+    path('myresume/', login_required(MyResumeUpdateView.as_view()), name='myresume'),
+    path('myresume/plug/', login_required(MyResumePlugView.as_view()), name='myresume_plug'),
+    path('myresume/create/', login_required(MyResumeCreateView.as_view()), name='myresume_create'),
     path('myvacancy/<int:pk>', login_required(MyVacancyUpdateView.as_view()), name='myvacancy_update'),
     path('myvacancy/create/', login_required(MyVacancyCreateView.as_view()), name='myvacancy_create'),
     path('myvacancies/', login_required(MyVacanciesView.as_view()), name='myvacancies'),

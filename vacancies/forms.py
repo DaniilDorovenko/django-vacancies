@@ -42,4 +42,3 @@ class VacancyApplicationForm(ModelForm):
     class Meta:
         model = VacancyApplication
         fields =  ['written_username',  'written_phone', 'written_cover_letter', ]
-        
