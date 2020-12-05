@@ -36,8 +36,6 @@ class VacancyView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(VacancyView, self).get_context_data(**kwargs)
         context['form'] = VacancyApplicationForm
-        context['applications'] = VacancyApplication.objects.filter(vacancy__id=self.kwargs['pk'])
-        print()
         return context
 
     def post(self, request, pk):
@@ -145,17 +143,24 @@ class MyVacancyUpdateView(UpdateView):
     model = Vacancy
     fields = ['title', 'specialty', 'salary_min', 'salary_max', 'skills', 'description']
 
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            mycacancy = Company.objects.get(vacancy__id=self.kwargs['pk'], owner=self.request.user)
-        except Company.DoesNotExist:
-            return redirect('myvacancies')
-        # self.form_valid(form)
-        return super(MyVacancyUpdateView, self).get(request, *args, **kwargs)
+    def get_context_data(self, **kwargs):
+        context = super(MyVacancyUpdateView, self).get_context_data(**kwargs)
+        context['applications'] = VacancyApplication.objects.filter(vacancy__id=self.kwargs['pk'])
+        return context
 
-    # def form_valid(self, form):
-    #     messages.success(self.request, 'Вакансия добавлена')
-    #     return super().form_valid(form)
+    # def dispatch(self, request, *args, **kwargs):
+    #     try:
+    #         mycacancy = Company.objects.get(vacancy__id=self.kwargs['pk'], owner=self.request.user)
+    #     except Company.DoesNotExist:
+    #         return redirect('myvacancies')
+    #     return super(MyVacancyUpdateView, self).get(request, *args, **kwargs)
+
+    def form_valid(self, form, **kwargs):
+        vacancy = form.cleaned_data['title']
+        messages.success(self.request, f'Вакансия {vacancy} изменена')
+        # return super().form_valid(form)
+        # return redirect('myvacancy', pk=self.kwargs['pk'])
+        return redirect('myvacancies')
 
 class MyVacancyCreateView(CreateView):
     model = Vacancy
