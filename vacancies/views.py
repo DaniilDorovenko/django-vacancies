@@ -100,10 +100,10 @@ class SignupView(CreateView):
      template_name = 'register.html'
 
 
-class MyCompanyUpdateView(UpdateView):
+class MyCompanyUpdateView(SuccessMessageMixin, UpdateView):
     model = Company
     fields = ['title',  'employee_count', 'location', 'description', 'logo']
-
+    success_message = 'Нифига не работает'
 
     def dispatch(self, request, *args, **kwargs):
         try:
