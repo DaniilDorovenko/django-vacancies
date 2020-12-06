@@ -47,3 +47,4 @@ toml==0.10.2
 whitenoise==5.2.0
 zipp==3.4.0
 gunicorn
+dj-database-url
