@@ -16,6 +16,9 @@ class Company(models.Model):
     employee_count = models.IntegerField(verbose_name=u"Количество человек в компании")
     owner = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.title
+
 
 class Specialty(models.Model):
     code = models.CharField(max_length=64)
@@ -36,6 +39,8 @@ class Vacancy(models.Model):
     salary_max = models.FloatField(verbose_name=u"Зарплата до")
     published_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.title
 
 class VacancyApplication(models.Model):
     written_username = models.CharField(max_length=64, verbose_name=u"Имя")
@@ -43,6 +48,13 @@ class VacancyApplication(models.Model):
     written_cover_letter = models.TextField(verbose_name=u"Сопроводительное письмо")
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
     applicant = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['vacancy', 'applicant'],
+                name='one_vacancy_application')
+        ]
 
 class Status(models.Model):
     status = models.CharField(max_length=64, verbose_name=u"Статус")

@@ -2,26 +2,11 @@
 {% block content %}
 
   <main class="container mt-3">
-      <h1 class="h1 text-center mx-auto mt-4 pt-5" style="font-size: 30px;"><strong>Поиск вакансий</strong></h1>
-  <div class="col-12 col-md-8 col-lg-6 offset-lg-3 offset-md-2">
-  <form action="{% url 'search_result' %}" method="get"  class="form-inline mb-3" enctype="multipart/form-data">
-               {% csrf_token %}
-            <div class="form-group col-8 col-md-10 pl-0">
-              <input  name="query" class="form-control w-100" type="search" placeholder="Найти работу" aria-label="Найти работу или стажировку">
-            </div>
-            <div class="form-group col-4 col-md-2 pl-0">
-              <button class="btn btn-primary w-100" type="submit">Найти</button>
-            </div>
-          </form>
-  </div>
     <section>
-        {% if specialisation  %}
-            <h1 class="h1 text-center mx-auto mt-4 pt-5" style="font-size: 70px;"><strong>{{ specialisation }}</strong></h1>
-        {% endif %}
-      <p class="text-center pt-1">{{ object_list | length }} вакансий</p>
+      <p class="text-center pt-1">Найдено {{ vacancies | length }} вакансий</p>
       <div class="row mt-5">
         <div class="col-12 col-lg-8 offset-lg-2 m-auto">
-            {% for vacancy in object_list %}
+            {% for vacancy in vacancies %}
                 <div class="card mb-4">
                 <div class="card-body px-4">
                   <div class="row">

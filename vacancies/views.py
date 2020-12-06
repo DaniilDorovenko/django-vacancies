@@ -1,4 +1,4 @@
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.db import IntegrityError
 from django.shortcuts import render, redirect
 from django.views.generic import View, DetailView, ListView, CreateView, UpdateView
@@ -222,6 +222,16 @@ class MyResumeCreateView(SuccessMessageMixin, CreateView):
         resume.owner = self.request.user
         resume.save()
         return redirect('myresume')
+
+class SearchView(View):
+
+    def get(self, request):
+        query = self.request.GET.get('query')
+        vacancy = Vacancy.objects.filter(
+            Q(company__vacancy__title__icontains=query) |
+            Q(company__vacancy__description__icontains=query)
+            | Q(company__vacancy__skills__icontains=query))
+        return render(request, 'search_results.html',  {'vacancies': vacancy})
 
 
 def page_not_found(request, exception):
