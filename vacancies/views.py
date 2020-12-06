@@ -42,12 +42,12 @@ class VacancyView(DetailView):
     def post(self, request, pk):
         form = VacancyApplicationForm(request.POST)
         if form.is_valid():
-            data = form.cleaned_data
+            _data = form.cleaned_data
             try:
                 VacancyApplication.objects.create(
-                    written_username=data['written_username'],
-                    written_phone=data['written_phone'],
-                    written_cover_letter=data['written_cover_letter'],
+                    written_username=_data['written_username'],
+                    written_phone=_data['written_phone'],
+                    written_cover_letter=_data['written_cover_letter'],
                     vacancy=Vacancy.objects.get(id=pk),
                     applicant=request.user)
             except IntegrityError as e:
