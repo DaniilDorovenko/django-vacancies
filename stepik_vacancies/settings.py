@@ -140,9 +140,9 @@ MEDIA_ROOT = 'media'
 MEDIA_COMPANY_IMAGE_DIR = 'company_images'
 MEDIA_SPECIALITY_IMAGE_DIR = 'speciality_images'
 
-STATICFILES_DIRS = (
-    'C:\\projects\\stepik_vacancies\\stepik_vacancies\\static',
-)
+# STATICFILES_DIRS = (
+#     'C:\\projects\\stepik_vacancies\\stepik_vacancies\\static',
+# )
 
 
 # Activate Django-Heroku.
