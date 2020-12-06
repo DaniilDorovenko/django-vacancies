@@ -6,30 +6,26 @@ from vacancies.models import Vacancy, Company, Specialty
 from data import specialties, companies, jobs
 
 
-
 class Command(BaseCommand):
-    help = 'Parse data file'
 
     def handle(self, *args, **options):
 
-        id = 0
+        _id = 0
 
         for specialty in specialties:
             Specialty.objects.get_or_create(
                 code=specialty['code'],
                 title=specialty['title'])
 
-
         for company in companies:
-            id += 1
+            _id += 1
             Company.objects.get_or_create(
                     id=company['id'],
                     title=company['title'],
-                    # logo=company['logo'],
                     employee_count=company['employee_count'],
                     location=company['location'],
                     description=company['description'],
-                    owner=User.objects.get(id=id)
+                    owner=User.objects.get(id=_id),
                 )
 
         for job in jobs:
@@ -39,11 +35,11 @@ class Command(BaseCommand):
             Vacancy.objects.get_or_create(
                     id=job['id'],
                     title=job['title'],
-                    specialty = specialty,
-                    company = company,
-                    skills = job['skills'],
-                    description = job['description'],
-                    salary_min = job['salary_from'],
-                    salary_max = job['salary_to'],
-                    published_at = job['posted'],
+                    specialty=specialty,
+                    company=company,
+                    skills=job['skills'],
+                    description=job['description'],
+                    salary_min=job['salary_from'],
+                    salary_max=job['salary_to'],
+                    published_at=job['posted'],
                 )

@@ -6,8 +6,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 from tinymce import HTMLField
 
 
-
-
 class Company(models.Model):
     title = models.CharField(max_length=64, verbose_name=u"Название компании")
     location = models.CharField(max_length=64, verbose_name=u"География")
@@ -42,6 +40,7 @@ class Vacancy(models.Model):
     def __str__(self):
         return self.title
 
+
 class VacancyApplication(models.Model):
     written_username = models.CharField(max_length=64, verbose_name=u"Имя")
     written_phone = PhoneNumberField(verbose_name=u"Телефон")
@@ -49,12 +48,16 @@ class VacancyApplication(models.Model):
     vacancy = models.ForeignKey(Vacancy, on_delete=models.CASCADE)
     applicant = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'Отзыв {self.written_username} на {self.vacancy.title}'
+
     class Meta:
         constraints = [
             models.UniqueConstraint(
                 fields=['vacancy', 'applicant'],
-                name='one_vacancy_application')
+                name='one_vacancy_application'),
         ]
+
 
 class Status(models.Model):
     status = models.CharField(max_length=64, verbose_name=u"Статус")
@@ -63,7 +66,7 @@ class Status(models.Model):
         return self.status
 
 
-class  Grade(models.Model):
+class Grade(models.Model):
     grade = models.CharField(max_length=64, verbose_name=u"Квалификация")
 
     def __str__(self):
@@ -79,3 +82,6 @@ class Resume(models.Model):
     education = HTMLField(u'Образование')
     experience = HTMLField(u'Опыт работы')
     portfolio = models.CharField(max_length=64, verbose_name=u"Ссылка на портфолио")
+
+    def __str__(self):
+        return f'Резюме {self.owner.username}'

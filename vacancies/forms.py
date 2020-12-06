@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 
 from vacancies.models import VacancyApplication
 
-class SignupForm(UserCreationForm):
 
+class SignupForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -19,7 +19,6 @@ class SignupForm(UserCreationForm):
         self.fields['password1'].label = False
         self.fields['password2'].label = False
 
-
     class Meta:
         model = User
         fields = ("username",
@@ -29,7 +28,6 @@ class SignupForm(UserCreationForm):
 
 class LoginForm(AuthenticationForm):
 
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].label = False
@@ -38,7 +36,10 @@ class LoginForm(AuthenticationForm):
 
 class VacancyApplicationForm(ModelForm):
 
-
     class Meta:
         model = VacancyApplication
-        fields =  ['written_username',  'written_phone', 'written_cover_letter', ]
+        fields = [
+            'written_username',
+            'written_phone',
+            'written_cover_letter',
+        ]

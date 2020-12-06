@@ -86,7 +86,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    },
 }
 
 
@@ -141,9 +141,8 @@ MEDIA_COMPANY_IMAGE_DIR = 'company_images'
 MEDIA_SPECIALITY_IMAGE_DIR = 'speciality_images'
 
 STATICFILES_DIRS = (
-    'C:\projects\stepik_vacancies\stepik_vacancies\static',
+    'C:\\projects\\stepik_vacancies\\stepik_vacancies\\static',
 )
-
 
 
 # Activate Django-Heroku.
@@ -155,4 +154,3 @@ LOGIN_URL = 'login'
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-

@@ -28,6 +28,8 @@ urlpatterns = [
     path('myvacancy/<int:pk>', login_required(MyVacancyUpdateView.as_view()), name='myvacancy_update'),
     path('myvacancy/create/', login_required(MyVacancyCreateView.as_view()), name='myvacancy_create'),
     path('myvacancies/', login_required(MyVacanciesView.as_view()), name='myvacancies'),
-    path('myvacancy/<int:pk>/applications/', login_required(MyVacancyApplicatiosView.as_view()), name='myvacancy_applications'),
+    path('myvacancy/<int:pk>/applications/',
+         login_required(MyVacancyApplicatiosView.as_view()),
+         name='myvacancy_applications'),
     path('search_result/', SearchView.as_view(), name='search_result'),
 ]

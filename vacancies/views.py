@@ -6,6 +6,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+
 from vacancies.forms import SignupForm, LoginForm, VacancyApplicationForm
 from vacancies.models import Vacancy, Company, Specialty, VacancyApplication, Resume
 
@@ -18,7 +19,7 @@ class MainView(View):
             .values('title', 'code')\
             .annotate(vacancy_count=Count('vacancy'))
         companies = Company.objects\
-            .values('title', 'logo', 'id',)\
+            .values('title', 'logo', 'id')\
             .annotate(vacancy_count=Count('vacancy'))
 
         return render(request, 'index.html', {
@@ -43,7 +44,7 @@ class VacancyView(DetailView):
         if form.is_valid():
             data = form.cleaned_data
             try:
-                application = VacancyApplication.objects.create(
+                VacancyApplication.objects.create(
                     written_username=data['written_username'],
                     written_phone=data['written_phone'],
                     written_cover_letter=data['written_cover_letter'],
@@ -51,11 +52,11 @@ class VacancyView(DetailView):
                     applicant=request.user)
             except IntegrityError as e:
                 if 'UNIQUE constraint failed' in e.args[0]:
-                    print('Вы уже оставили отклик')
+                    messages.warning(self.request, 'Вы уже оставили отклик')
 
         elif 'written_phone' not in form.cleaned_data:
-            print('Неверный формат номера')
-            form.add_error('written_phone','Неверный формат номера, используйте "+X XXX XXX XX XX"')
+            messages.warning(self.request, 'Неверный формат номера')
+            form.add_error('written_phone', 'Неверный формат номера, используйте "+X XXX XXX XX XX"')
 
         return redirect('vacancy', pk=pk)
 
@@ -97,13 +98,13 @@ class MyLoginView(LoginView):
 
 
 class MyLogoutView(LogoutView):
-     pass
+    pass
 
 
 class SignupView(CreateView):
-     form_class = SignupForm
-     success_url = '/login'
-     template_name = 'register.html'
+    form_class = SignupForm
+    success_url = '/login'
+    template_name = 'register.html'
 
 
 class MyCompanyUpdateView(SuccessMessageMixin, UpdateView):
@@ -114,7 +115,7 @@ class MyCompanyUpdateView(SuccessMessageMixin, UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         try:
-            mycompany = Company.objects.get(owner = self.request.user)
+            Company.objects.get(owner=self.request.user)
         except Company.DoesNotExist:
             return redirect('mycompany_plug')
         self.get_object()
@@ -128,7 +129,7 @@ class MyCompanyUpdateView(SuccessMessageMixin, UpdateView):
 
 class MyCompanyCreateView(SuccessMessageMixin, CreateView):
     model = Company
-    fields = ['title',  'employee_count', 'location', 'description', 'logo', ]
+    fields = ['title',  'employee_count', 'location', 'description', 'logo']
     success_message = 'Компания создана'
     success_url = '/mycompany/'
 
@@ -144,7 +145,7 @@ class MyVacanciesView(View):
     def get(self, request):
         myvacancies = Vacancy.objects.filter(company__owner=request.user)\
             .annotate(appication_count=Count('vacancyapplication'))
-        return render(request, 'my-vacancy-list.html',{'myvacancies': myvacancies})
+        return render(request, 'my-vacancy-list.html', {'myvacancies': myvacancies})
 
 
 class MyVacancyUpdateView(SuccessMessageMixin, UpdateView):
@@ -160,7 +161,7 @@ class MyVacancyUpdateView(SuccessMessageMixin, UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         try:
-            mycacancy = Company.objects.get(vacancy__id=self.kwargs['pk'], owner=self.request.user)
+            Company.objects.get(vacancy__id=self.kwargs['pk'], owner=self.request.user)
         except Company.DoesNotExist:
             return redirect('myvacancies')
         return super(MyVacancyUpdateView, self).dispatch(request, *args, **kwargs)
@@ -176,6 +177,7 @@ class MyVacancyCreateView(CreateView):
         vacancy.save()
         messages.success(self.request, 'Вакансия добавлена')
         return redirect('myvacancies')
+
 
 class MyVacancyApplicatiosView(ListView):
     model = VacancyApplication
@@ -199,7 +201,7 @@ class MyResumeUpdateView(SuccessMessageMixin, UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         try:
-            myresume = Resume.objects.get(owner = self.request.user)
+            Resume.objects.get(owner=self.request.user)
         except Resume.DoesNotExist:
             return redirect('myresume_plug')
         self.get_object()
@@ -222,6 +224,7 @@ class MyResumeCreateView(SuccessMessageMixin, CreateView):
         resume.owner = self.request.user
         resume.save()
         return redirect('myresume')
+
 
 class SearchView(View):
 

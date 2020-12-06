@@ -14,6 +14,7 @@ class CompanyAdmin(admin.ModelAdmin):
 class VacancyApplicationAdmin(admin.ModelAdmin):
     pass
 
+
 admin.site.register(Vacancy, VacancyAdmin)
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(VacancyApplication, VacancyApplicationAdmin)

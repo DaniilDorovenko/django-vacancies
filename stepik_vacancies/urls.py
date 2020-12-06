@@ -24,8 +24,7 @@ handler500 = 'vacancies.views.server_error'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('vacancies.urls')),
-path('tinymce/', include('tinymce.urls')),
-
+    path('tinymce/', include('tinymce.urls')),
 ]
 
 
