@@ -4,4 +4,5 @@
 /stepik_dj_demo-master/
 *.pyc
 .idea
-/staticfiles/
+/staticfiles/django_tinymce/
+/staticfiles/tinymce/
