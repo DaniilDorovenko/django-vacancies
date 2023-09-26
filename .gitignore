@@ -6,3 +6,4 @@
 .idea
 /staticfiles/django_tinymce/
 /staticfiles/tinymce/
+/staticfiles/admin/
