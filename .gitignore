@@ -4,3 +4,4 @@
 /stepik_dj_demo-master/
 *.pyc
 .idea
+/staticfiles/
